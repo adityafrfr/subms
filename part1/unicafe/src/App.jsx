@@ -1,121 +1,91 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+const Text = (props) => {
+  return (
+    <div>{props.textVal}</div>
+  )
+}
+
+const StatisticLine = (props) => {
+  return (
+    <tr><td>{props.text}</td><td>{props.value}</td></tr>
+  )
+}
+
+const Button = (props) => {
+  return (
+    <button onClick={props.onClick}>{props.text}</button>
+  )
+}
+
+
+const Statistics = (props) => {
+  if (props.sum === 0) {
+    return (
+      <div>
+        <p>No feedback given</p>
+      </div>
+    )
+  }
+  return (
+    <div>
+      <table>
+        <tbody>
+      <StatisticLine text='sum' value={props.sum} />
+      <StatisticLine text='Average' value={(props.good - props.bad) / props.sum} />
+      <StatisticLine text='Positive' value={String((props.good / props.sum) * 100) + ' %'} />
+        </tbody>
+      </table>
+    </div>
+  )
+
+
+}
+
+const App = () => {
+
+  const [good, setGood] = useState(0)
+  const [neutral, setNeutral] = useState(0)
+  const [bad, setBad] = useState(0)
+  const [sum, setSum] = useState(0)
+
+  const onGood = () => {
+    const updatedGood = good + 1
+    setGood(updatedGood)
+    setSum(updatedGood + neutral + bad)
+
+  }
+
+  const onNeutral = () => {
+    const updatedNeutral = neutral + 1
+    setNeutral(updatedNeutral)
+    setSum(good + updatedNeutral + bad)
+
+  }
+
+  const onBad = () => {
+    const updatedBad = bad + 1
+    setBad(updatedBad)
+    setSum(good + neutral + updatedBad)
+  }
+
+
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <div>
+      <Text textVal={'Give Feedback'} />
 
-      <div className="ticks"></div>
+      <Button onClick={onGood} text={'Good'} />
+      <Button onClick={onNeutral} text={'neutral'} />
+      <Button onClick={onBad} text={'Bad'} />
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+      <Statistics good={good} neutral={neutral} sum={sum} bad={bad} />
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+      <p>good {good}</p>
+      <p>neutral {neutral}</p>
+      <p>bad {bad}</p>
+
+    </div>
   )
 }
 
