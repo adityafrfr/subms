@@ -8,9 +8,7 @@ const getRandom = (max, min) => {
   return Math.floor(Math.random() * (max - min + 1)) + min
 }
 
-const voteButton = (props) => {
-  
-}
+
 
 const App = () => {
 
@@ -26,16 +24,33 @@ const App = () => {
     'The only way to go fast, is to go well.'
   ]
 
-  const votes = new Array(anecdotes.length).fill(0)
-   
   const [selected, setSelected] = useState(0)
+  const [votes, setVotes] = useState(new Array(anecdotes.length).fill(0))
 
-  
+
+
+  const updateVotes = () => {
+    const newVotes = [...votes]
+    newVotes[selected] += 1
+    setVotes(newVotes)
+  }
+
+  const mostVotes = () => {
+    const maxIndex = votes.indexOf(Math.max(...votes))
+    return maxIndex
+  }
+
+
 
   return (
     <div>
       <p>{anecdotes[selected]}</p>
-      <Button onClick={() => setSelected(getRandom(7, 0))} text={"Next"}/>
+      <Button onClick={() => setSelected(getRandom(7, 0))} text={"Next"} />
+      <Button onClick={updateVotes} text={"Vote"} />
+
+      <h2>Anecdote with most votes</h2>
+      <p>{anecdotes[mostVotes()]}</p>
+      <p>has {votes[mostVotes()]} votes</p>
     </div>
   )
 }
