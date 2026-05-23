@@ -12,56 +12,70 @@ const App = () => {
 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
+  const [searchFilter, setSearchFilter] = useState('')
 
-  const handleNameChange = (event) =>  {
+  const handleNameChange = (event) => {
     console.log(event.target.value)
     setNewName(event.target.value)
   }
 
-  const handleNumberChange = (event) =>  {
+  const handleNumberChange = (event) => {
     console.log(event.target.value);
     setNewNumber(event.target.value)
-    
+
   }
+
+  const searchFilterUpdate = (event) => {
+    setSearchFilter(event.target.value)
+  }
+
+  const personToShow = searchFilter === '' ? persons : persons.filter(person => person.name.toLowerCase().includes(searchFilter.toLowerCase()))
+
 
   const addPerson = (event) => {
     event.preventDefault()
 
-    if (persons.some(person => newName === person.name) || persons.some(person => newNumber === person.number))  {
+    if (persons.some(person => newName === person.name) || persons.some(person => newNumber === person.number)) {
       console.log('err, duplicate name or number');
       return
     }
 
-    setPersons(persons.concat({name: newName, number: newNumber}))
+    setPersons(persons.concat({ name: newName, number: newNumber }))
     setNewName('')
     setNewNumber('')
 
   }
 
-    return (
-      <div>
-        <h2>Phonebook</h2>
+  return (
+    <div>
+      <h2>Phonebook</h2>
 
-        <form onSubmit={addPerson}>
-          <div>
-            name: <input onChange={handleNameChange} value={newName} />
-            <p>number: <input onChange={handleNumberChange} value={newNumber} /></p>  
-          </div>
+      <h3>Search</h3>
+      <form >
+        <p>search: <input onChange={searchFilterUpdate} /></p>
+      </form>
 
-          <div>
-            <button type="submit">add</button>
-          </div>
+      <h3>Enter data</h3>
+      <form onSubmit={addPerson}>
+        <div>
+          name: <input onChange={handleNameChange} value={newName} />
+          <p>number: <input onChange={handleNumberChange} value={newNumber} /></p>
+        </div>
 
-        </form>
+        <div>
+          <button type="submit">add</button>
+        </div>
 
-        <h2>Numbers</h2>
+      </form>
 
-        {persons.map(person => <ShowName personName={person.name} key={person.name} personNumber={person.number}/>)}
-        
-        <div>debug: {newName} {newNumber}</div>
+      <h2>Numbers</h2>
 
-      </div>
-    )
-  }
+      {personToShow.map(person => <ShowName personName={person.name} key={person.name} personNumber={person.number} />)}
 
-  export default App
+      <div>debug: {newName} {newNumber}</div>
+
+    </div>
+  )
+}
+
+export default App
