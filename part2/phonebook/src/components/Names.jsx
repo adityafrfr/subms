@@ -1,6 +1,6 @@
-const ShowName = ({personName}) => {
+const ShowName = (props) => {
     return(
-        <p>{personName}</p>
+        <p>{props.personName} {props.personNumber}</p>
     )
 }
 
