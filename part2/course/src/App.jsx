@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { useEffect } from "react"
-import  axios  from "axios"
+import axios from "axios"
 import Note from "./components/Note"
 
 
@@ -10,19 +10,19 @@ const App = () => {
   const [showAll, setShowAll] = useState(true)
 
   const hook = () => {
-  console.log('effect')
-  axios
-    .get('http://localhost:3001/notes')
-    .then(response => {
-      console.log('promise fulfilled')
-      setNotes(response.data)
-    })
-}
+    console.log('effect')
+    axios
+      .get('http://localhost:3001/notes')
+      .then(response => {
+        console.log('promise fulfilled')
+        setNotes(response.data)
+      })
+  }
 
-useEffect(hook, [])
+  useEffect(hook, [])
 
   console.log('render', notes.length, 'notes')
-  
+
 
   const handleNoteChange = (event) => {
     console.log(event.target.value);
@@ -39,8 +39,12 @@ useEffect(hook, [])
       id: String(notes.length + 1)
     }
 
-    setNotes(notes => notes.concat(noteObject))
-    setNewNote('')
+    axios.post('http://localhost:3001/notes', noteObject)
+    .then(response => {
+      setNotes(notes.concat(response.data))
+      setNewNote('')
+      
+    })
   }
 
   const notesToShow = showAll ? notes : notes.filter(notes => notes.important === true)
