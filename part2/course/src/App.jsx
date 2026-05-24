@@ -30,6 +30,11 @@ const App = () => {
 
   }
 
+  const toggleImportanceOf = (id) =>  {
+    console.log(`need to toggle importance of ${id}`);
+    
+  }
+
 
   const addNote = (event) => {
     event.preventDefault()
@@ -58,7 +63,7 @@ const App = () => {
         </button>
       </div>
       <ul>
-        {notesToShow.map(note => <Note key={note.id} note={note} />)}
+        {notesToShow.map(note => <Note key={note.id} note={note} toggleImportance={() => toggleImportanceOf(note.id)}/>)}
       </ul>
       <form onSubmit={addNote}>
         Make a note: <input
