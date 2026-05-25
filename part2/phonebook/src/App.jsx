@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import ShowName from './components/Names'
 import axios from "axios"
 import contactService from './service/contacts'
+import Notification from './components/Notification'
 
 const App = () => {
 
@@ -9,6 +10,12 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchFilter, setSearchFilter] = useState('')
+  const [notification, setNotification] = useState({ message: null, type: null })
+
+  const notify = (message, type = 'success') => {
+    setNotification({ message, type })
+    setTimeout(() => setNotification({ message: null, type: null }), 1000)
+  }
 
 
 
@@ -45,7 +52,10 @@ const App = () => {
     if (existingPerson) {
       if (window.confirm(`${newName} already exists. replace number?`)) {
         contactService.update(existingPerson.id, { ...existingPerson, number: newNumber })
-          .then(response => setPersons(person => person.map(p => p.id === existingPerson.id ? response : p)))
+          .then(response => {
+            setPersons(person => person.map(p => p.id === existingPerson.id ? response : p))
+            notify(`Updated ${newName}`)
+          })
         setNewName('')
         setNewNumber('')
       }
@@ -58,6 +68,7 @@ const App = () => {
         setPersons(persons.concat(response))
         setNewName('')
         setNewNumber('')
+        notify(`Created ${newName}`)
       })
   }
 
@@ -66,41 +77,46 @@ const App = () => {
       contactService.remove(id)
         .then(() => {
           setPersons(persons.filter(person => person.id !== id))
+          notify(`Deleted ${newName}`)
+        })
+        .catch(error => {
+          notify(`${name} Does not exist`, 'error')
         })
     }
   }
 
 
-  return (
-    <div>
-      <h2>Phonebook</h2>
 
-      <h3>Search</h3>
-      <form >
-        <p>search: <input onChange={searchFilterUpdate} /></p>
-      </form>
+return (
+  <div>
+    <h2>Phonebook</h2>
+    <Notification message={notification.message} type={notification.type} />
+    <h3>Search</h3>
+    <form >
+      <p>search: <input onChange={searchFilterUpdate} /></p>
+    </form>
 
-      <h3>Enter data</h3>
-      <form onSubmit={addPerson}>
-        <div>
-          name: <input onChange={handleNameChange} value={newName} />
-          <p>number: <input onChange={handleNumberChange} value={newNumber} /></p>
-        </div>
+    <h3>Enter data</h3>
+    <form onSubmit={addPerson}>
+      <div>
+        name: <input onChange={handleNameChange} value={newName} />
+        <p>number: <input onChange={handleNumberChange} value={newNumber} /></p>
+      </div>
 
-        <div>
-          <button type="submit">add</button>
-        </div>
+      <div>
+        <button type="submit">add</button>
+      </div>
 
-      </form>
+    </form>
 
-      <h2>Numbers</h2>
+    <h2>Numbers</h2>
 
-      {personToShow.map(person => <ShowName personName={person.name} key={person.name} personNumber={person.number} onClick={() => { deletePerson(person.id, person.name) }} />)}
+    {personToShow.map(person => <ShowName personName={person.name} key={person.name} personNumber={person.number} onClick={() => { deletePerson(person.id, person.name) }} />)}
 
-      <div>debug: {newName} {newNumber}</div>
+    <div>debug: {newName} {newNumber}</div>
 
-    </div>
-  )
+  </div>
+)
 }
 
 export default App
