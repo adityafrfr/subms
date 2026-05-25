@@ -36,9 +36,14 @@ app.get('/api/notes/:id', (request, response) => {
         response.json(note)
     }
     else {
-        response.statusMessage('Doesnt exist')
-        response.status(404).json('Doesnt')
+        response.status(404).json('Does not exist')
     }
+})
+
+app.delete('/api/notes/:id', (request, response) => {
+    const id = request.params.id
+    notes = notes.filter(note => note.id !== id)
+    response.status(204).end()
 })
 
 
