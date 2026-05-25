@@ -39,18 +39,20 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault()
+    const existingPerson = persons.find(person => person.name === newName)
 
-    if (persons.some(person => newName === person.name) || persons.some(person => newNumber === person.number)) {
-      console.log('err, duplicate name or number');
+
+    if (existingPerson) {
+      if (window.confirm(`${newName} already exists. replace number?`)) {
+        contactService.update(existingPerson.id, { ...existingPerson, number: newNumber })
+          .then(response => setPersons(person => person.map(p => p.id === existingPerson.id ? response : p)))
+        setNewName('')
+        setNewNumber('')
+      }
       return
     }
 
-    if (window.confirm(`${name} already exists, do you want to change the number`)) {
-      contactService.update(id, {})
-        .then(() => {
-          setPersons(persons.filter(person => person.id !== id))
-        })
-    }
+
     contactService.create({ name: newName, number: newNumber })
       .then(response => {
         setPersons(persons.concat(response))
