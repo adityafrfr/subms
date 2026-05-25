@@ -1,28 +1,23 @@
 import { useEffect, useState } from 'react'
 import ShowName from './components/Names'
 import axios from "axios"
+import contactService from './service/contacts'
 
 const App = () => {
 
   const [persons, setPersons] = useState([])
-
-
-
-  const hook = () =>  {
-    axios
-    .get('http://localhost:3001/persons')
-    .then(response => {
-      console.log('fulfilled')
-      setPersons(response.data)
-      
-    })
-  }
-
-  useEffect(hook, [])
-
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchFilter, setSearchFilter] = useState('')
+
+
+
+  useEffect(() => {
+    contactService.getAll().then(response => {
+      setPersons(response)
+    })
+  }, [])
+
 
   const handleNameChange = (event) => {
     console.log(event.target.value)
@@ -50,11 +45,29 @@ const App = () => {
       return
     }
 
-    setPersons(persons.concat({ name: newName, number: newNumber }))
-    setNewName('')
-    setNewNumber('')
-
+    if (window.confirm(`${name} already exists, do you want to change the number`)) {
+      contactService.update(id, {})
+        .then(() => {
+          setPersons(persons.filter(person => person.id !== id))
+        })
+    }
+    contactService.create({ name: newName, number: newNumber })
+      .then(response => {
+        setPersons(persons.concat(response))
+        setNewName('')
+        setNewNumber('')
+      })
   }
+
+  const deletePerson = (id, name) => {
+    if (window.confirm(`Delete ${name}?`)) {
+      contactService.remove(id)
+        .then(() => {
+          setPersons(persons.filter(person => person.id !== id))
+        })
+    }
+  }
+
 
   return (
     <div>
@@ -80,7 +93,7 @@ const App = () => {
 
       <h2>Numbers</h2>
 
-      {personToShow.map(person => <ShowName personName={person.name} key={person.name} personNumber={person.number} />)}
+      {personToShow.map(person => <ShowName personName={person.name} key={person.name} personNumber={person.number} onClick={() => { deletePerson(person.id, person.name) }} />)}
 
       <div>debug: {newName} {newNumber}</div>
 

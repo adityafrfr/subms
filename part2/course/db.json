@@ -7,7 +7,7 @@
     },
     {
       "content": "Browser can execute only JavaScrip",
-      "important": true,
+      "important": false,
       "id": "2vcKFD0pNTg"
     },
     {
@@ -17,12 +17,12 @@
     },
     {
       "content": "Note 1",
-      "important": true,
+      "important": false,
       "id": "_GzDpo4dGDY"
     },
     {
       "content": "Note 2",
-      "important": false,
+      "important": true,
       "id": "_riTRbck8Wo"
     }
   ],
