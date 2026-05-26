@@ -58,40 +58,41 @@ app.delete(`/api/persons/:id`, (request, response) => {
         people = people.filter(p => p.id !== id)
         console.log(`deleted ${person.name} with id ${person.id}`);
         return response.status(204).end()
-        
+
+    } else {
+        return response.status(404).json({
+            error: 'person not found'
+        })
     }
-    else {
-    return response.status(404).json({ error: 'person not found' })
-}
 })
 
 app.post('/api/persons', (request, response) => {
     const body = request.body
 
-    if (!body.name || !body.number)    {
+    if (!body.name || !body.number) {
         return response.status(400).json({
-            error : 'content missing'
+            error: 'content missing'
         })
     }
 
     if (people.find(p => p.name === body.name)) {
         return response.status(400).json({
-            error : 'already exists'
+            error: 'already exists'
         })
 
     }
 
     const person = {
-        id : Math.floor(Math.random()*1000000),
-        name : body.name,
-        number : body.number
+        id: Math.floor(Math.random() * 1000000),
+        name: body.name,
+        number: body.number
     }
 
     people = people.concat(person)
     console.log(`created ${person.name} with ${person.id} and ${person.number}`);
-    
+
     return response.status(201).json(person)
-    
+
 })
 
 const port = 3001
