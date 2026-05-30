@@ -4,6 +4,8 @@ var morgan = require('morgan')
 
 app.use(express.json())
 
+app.use(express.static('dist'))
+
 const cors = require('cors')
 app.use(cors())
 const requestLogger = (request, response, next) => {
@@ -97,7 +99,7 @@ app.post('/api/persons', (request, response) => {
     }
 
     const person = {
-        id: Math.floor(Math.random() * 1000000),
+        id: String(Math.floor(Math.random() * 1000000)),
         name: body.name,
         number: body.number
     }
@@ -117,7 +119,7 @@ const unknownEndpoint = (request, response) => {
 
 app.use(unknownEndpoint)
 
-const port = 3001
+const port = process.env.PORT || 3001
 app.listen(port, () => {
     console.log(`listening on port ${port}`);
 })
