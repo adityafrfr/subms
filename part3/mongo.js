@@ -6,6 +6,11 @@ if (process.argv.length < 3)    {
     
 }
 
+if (process.argv.length != 3 || process.argv.length != 5)   {
+    console.log('args empty');
+    
+}
+
 const password = process.argv[2]
 
 const url = `mongodb+srv://user:${password}@cluster0.oww6s2c.mongodb.net/?appName=Cluster0`
@@ -13,6 +18,7 @@ const url = `mongodb+srv://user:${password}@cluster0.oww6s2c.mongodb.net/?appNam
 mongoose.set('strictQuery', false)
 
 mongoose.connect(url).then(() => {})
+
 
 const personSchema = mongoose.Schema({
     name: String,
@@ -25,4 +31,7 @@ if (process.argv.length == 3)   {
     Person.find({}).then(result =>    {
         result.forEach(person => {console.log(`${person.name} ${person.number}`)})
     }).then(() => {mongoose.connection.close()})
+}
+if (process.argv.length == 5)   {
+    Person.
 }
