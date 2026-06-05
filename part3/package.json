@@ -1,5 +1,25 @@
 {
+  "name": "phonebook",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
   "dependencies": {
-    "mongoose": "^9.6.3"
+    "debug": "~2.6.9",
+    "dotenv": "^17.4.2",
+    "express": "^4.22.2",
+    "mongodb": "^7.2.0",
+    "mongoose": "^9.6.3",
+    "morgan": "^1.11.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.4",
+    "eslint": "^9.39.4",
+    "eslint-plugin-react": "^7.37.5",
+    "globals": "^17.6.0",
+    "nodemon": "^3.1.14"
   }
 }
