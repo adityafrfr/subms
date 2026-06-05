@@ -1,12 +1,14 @@
+const path = require('path')
+require('dotenv').config({ path: path.join(__dirname, '../../.env') })
 const express = require('express')
 const app = express()
-var morgan = require('morgan')
+const morgan = require('morgan')
+const cors = require('cors')
 
 app.use(express.json())
 
 app.use(express.static('dist'))
 
-const cors = require('cors')
 app.use(cors())
 const requestLogger = (request, response, next) => {
     console.log('Method:', request.method)
@@ -119,7 +121,7 @@ const unknownEndpoint = (request, response) => {
 
 app.use(unknownEndpoint)
 
-const port = process.env.PORT || 3001
+const port = process.env.PORT
 app.listen(port, () => {
     console.log(`listening on port ${port}`);
 })
