@@ -48,7 +48,16 @@ const App = () => {
     const existingPerson = persons.find(person => person.name === newName)
 
     if (existingPerson) {
-      notify(`${newName} already exists`, 'error')
+      contactService.update(existingPerson.id, { name: newName, number: newNumber })
+        .then(response => {
+          setPersons(persons.map(p => p.id === existingPerson.id ? response : p))
+          setNewName('')
+          setNewNumber('')
+          notify(`Updated ${newName}`)
+        })
+        .catch(error => {
+          notify(error.response.data.error, 'error')
+        })
       return
     }
 
@@ -58,6 +67,9 @@ const App = () => {
         setNewName('')
         setNewNumber('')
         notify(`Created ${newName}`)
+      })
+      .catch(error => {
+        notify(error.response.data.error, 'error')
       })
   }
 
