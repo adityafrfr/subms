@@ -1,10 +1,9 @@
-const path = require('path')
-require('dotenv').config({ path: path.join(__dirname, '..', '..', '.env') })
+import { config } from "dotenv"
 
-const PORT = process.env.PORT || 3001
-const MONGODB_URI = process.env.MONGODB_URI
+config({ path: `.env.${process.env.NODE_ENV || 'development'}.local` })
 
-module.exports = {
+
+export const {
   MONGODB_URI,
   PORT,
-}
+} = process.env

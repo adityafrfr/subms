@@ -1,8 +1,6 @@
-const mongoose = require('mongoose')
+import mongoose from 'mongoose';
 
 mongoose.set('strictQuery', false)
-
-mongoose.connect(process.env.MONGODB_URI)
 
 const noteSchema = new mongoose.Schema({
   content: {
@@ -21,4 +19,6 @@ noteSchema.set('toJSON', {
   },
 })
 
-module.exports = mongoose.model('Note', noteSchema)
+const Note = mongoose.model('Note', noteSchema)
+
+export default Note
