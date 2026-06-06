@@ -23,6 +23,8 @@ app.get('/api/notes', (request, response, next) => {
   }).catch(error => next(error))
 })
 
+
+/*
 app.get('/api/notes/:id', (request, response, next) => {
   Note.findById(request.params.id)
     .then(note => {
@@ -34,7 +36,7 @@ app.get('/api/notes/:id', (request, response, next) => {
     })
     .catch(error => next(error))
 })
-
+*/
 app.post('/api/notes', (request, response, next) => {
   const body = request.body
 
